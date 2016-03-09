@@ -5,38 +5,51 @@ class App {
 		this.date = 0;
 		this.limit = Infinity;
         this.textBlock = document.createElement('span');
-        this.iconBlock = document.createElement('div');
         this.timerBlock = document.createElement('div');
         this.limitContainer = document.createElement('div');
 	}
 
-	container() {
+	createContainer() {
 		let container = document.createElement('div');
 
 		container.className = 'vk-daily';
 		this.textBlock.className = 'vk-daily__text';
-		this.iconBlock.className = 'vk-daily__icon';
 		this.timerBlock.className = 'vk-daily__timer';
 
 		//text.innerHtml = 'Вы онлайн уже';
-		this.timerBlock.innerHTML = 'Пожалуйста, подождите..';
+        this.timerBlock.innerHTML = 'Пожалуйста, подождите...';
+		this.textBlock.innerHTML = 'Ваше время онлайн:';
 
 		container.appendChild(this.textBlock);
-		container.appendChild(this.iconBlock);
 		container.appendChild(this.timerBlock);
 
 		return container;
 	}
 
+    createLimitContainer() {
+        this.limitContainer.className = 'vk-daily-limit';
+
+        let limitTextBlock = document.createElement('div');
+        let limitImageBlock = document.createElement('div');
+        limitTextBlock.className = 'vk-daily-limit__text';
+        limitImageBlock.className = 'vk-daily-limit__image';
+        limitTextBlock.innerHTML = "Ваш лимит пребывания Вконтакте на сегодня исчерпан.";
+        this.limitContainer.appendChild(limitImageBlock);
+        this.limitContainer.appendChild(limitTextBlock);
+        return this.limitContainer;
+    }
+
 	init() {
 		console.log('run');
-		document.body.insertBefore(this.container(), document.body.firstChild);
+		document.body.insertBefore(this.createContainer(), document.body.firstChild);
+        document.body.appendChild(this.createLimitContainer());
 
 		chrome.extension.sendMessage(
 			{ action: 'loadData' },
 			(response) => {
                 this.seconds = response.seconds || 0;
                 this.date =  response.date || this.getCurrentDate();
+                this.limit = response.limit || Infinity;
                 window.setInterval(() => {
                     this.track();
                 }, 1000);
@@ -74,6 +87,18 @@ class App {
         if( seconds < 10 ) seconds = "0" + seconds;
         
         this.timerBlock.innerHTML = hours+":"+minutes+":"+seconds;
+
+        if(this.seconds >= (this.limit / 100 * 80)) {
+            this.timerBlock.style.color = '#B16D6D';
+            this.timerBlock.style.background = 'rgba(236, 194, 194, 0.28);';
+            this.textBlock.innerHTML = 'Время на исходе:';
+        }
+
+        if(this.seconds >= this.limit) {
+            this.limitContainer.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            //document.body.style.WebkitFilter = 'blur(3px)';
+        }
     }
 
 	getCurrentDate() {
