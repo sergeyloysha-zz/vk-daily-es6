@@ -1,0 +1,24 @@
+{
+   "background": {
+      "scripts": [ "js/script.js" ]
+   },
+   "content_scripts": [ {
+      "all_frames": false,
+      "js": [ "js/tracking.bundle.js" ],
+      "css": [ "styles/style.css" ],
+      "matches": [ "*://*.vk.com/*" ],
+      "run_at": "document_end"
+   } ],
+   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+   "description": "Watch how much time you spend on VK every day",
+   "icons": {
+      "128": "images/icon128.png",
+      "16": "images/icon16.png",
+      "48": "images/icon48.png"
+   },
+   "manifest_version": 2,
+   "name": "Мое время Вконтакте",
+   "permissions": [ "tabs", "*://*.vk.com/*" ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "0.1"
+}

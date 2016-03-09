@@ -1,0 +1,30 @@
+.vk-spend {
+  position: absolute;
+  width: 200px;
+  left: 50%;
+  margin-left: -610px;
+  top: 9px;
+  text-align: right;
+}
+
+.vk-spend:hover .vk-spend__info {
+  display: inline-block;
+}
+
+.vk-spend__info {
+  display: none;
+  line-height: 20px;
+  color: #999;
+}
+
+.vk-spend__span {
+  display: inline-block;
+  background: #E1E7ED;
+  border-radius: 3px;
+  line-height: 20px;
+  padding: 0 10px;
+  color: #45688E;
+  font-weight: 400;
+  margin-left: 5px;
+  cursor: pointer;
+}
